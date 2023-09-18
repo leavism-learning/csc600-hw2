@@ -37,17 +37,14 @@ https://docs.google.com/document/d/17A86nQC-2ukVhONdGxNZP8X6RyYIBXKNkLo6kzpfH9A/
 
 ** ============================================================================ */
 
-
 /* ==========================================================================  **
 ## AI Copilot
 ** ============================================================================ */
 
 // If you used any resources, please list them here
 export const AI_COPILOT_HISTORY = [
-    "https://chat.openai.com/c/", // TODO: please paste the link to your AI CoPilot history here
+  'https://chat.openai.com/c/', // TODO: please paste the link to your AI CoPilot history here
 ];
-
-
 
 /* ==========================================================================  **
 ## 1. Five Item Rows (30 pts)
@@ -60,35 +57,56 @@ exactly five items is that we may have to modify it to hold any number of items.
 ** ============================================================================ */
 
 export type fiveItemRow<T> = {
-    entries: [T, T, T, T, T]   // A five item row
+  entries: [T, T, T, T, T]; // A five item row
 };
 
-type letter = 
-    "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" |
-    "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" |
-    "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" |
-    "Y" | "Z";
+type letter =
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'H'
+  | 'I'
+  | 'J'
+  | 'K'
+  | 'L'
+  | 'M'
+  | 'N'
+  | 'O'
+  | 'P'
+  | 'Q'
+  | 'R'
+  | 'S'
+  | 'T'
+  | 'U'
+  | 'V'
+  | 'W'
+  | 'X'
+  | 'Y'
+  | 'Z';
 
 const row1: fiveItemRow<letter> = {
-    entries: ['J', 'O', 'K', 'E', 'R']
+  entries: ['J', 'O', 'K', 'E', 'R'],
 };
 
 const row2: fiveItemRow<letter> = {
-    entries: ['P', 'O', 'K', 'E', 'R']
+  entries: ['P', 'O', 'K', 'E', 'R'],
 };
 
 const row3: fiveItemRow<letter> = {
-    entries: ['M', 'U', 'S', 'K', 'Y']
+  entries: ['M', 'U', 'S', 'K', 'Y'],
 };
 
 const row4: fiveItemRow<letter> = {
-    entries: ['F', 'U', 'S', 'S', 'Y']
+  entries: ['F', 'U', 'S', 'S', 'Y'],
 };
 
 const row5: fiveItemRow<letter> = {
-    entries: ['H', 'O', 'U', 'S', 'E']
+  entries: ['H', 'O', 'U', 'S', 'E'],
 };
-
 
 /* ----------------------------------------------------- **
 ### 1a. Complete the function definition below. (10 pts)
@@ -113,10 +131,20 @@ Example:
 
 ** ----------------------------------------------------- */
 
-export function filterFiveItemRow<T>(row: fiveItemRow<T>, cond: (arg: T) => boolean): T[] {
-    throw Error("TODO");
-}
+export function filterFiveItemRow<T>(
+  row: fiveItemRow<T>,
+  cond: (arg: T) => boolean
+): T[] {
+  const result: T[] = [];
 
+  row.entries.forEach((entry) => {
+    if (cond(entry)) {
+      result.push(entry);
+    }
+  });
+
+  return result;
+}
 
 /* ----------------------------------------------------- **
 ### 1b. Complete the function definition below. (10 pts)
@@ -141,8 +169,11 @@ Example:
 
 ** ----------------------------------------------------- */
 
-export function dropFiveItemRow<T>(row: fiveItemRow<T>, indices: number[]): T[] {
-    throw Error("TODO");
+export function dropFiveItemRow<T>(
+  row: fiveItemRow<T>,
+  indices: number[]
+): T[] {
+  throw Error('TODO');
 }
 
 /* ----------------------------------------------------- **
@@ -168,10 +199,12 @@ Example:
 
 ** ----------------------------------------------------- */
 
-export function mapFiveItemRow<S, T>(row: fiveItemRow<S>, f: (arg: S) => T): fiveItemRow<T> {
-    throw Error("TODO");
+export function mapFiveItemRow<S, T>(
+  row: fiveItemRow<S>,
+  f: (arg: S) => T
+): fiveItemRow<T> {
+  throw Error('TODO');
 }
-  
 
 /* ==========================================================================  **
 ## 2. Basic Functions on Wordle Board (30 pts)
@@ -185,90 +218,89 @@ Wordle game: https://www.nytimes.com/games/wordle/index.html
 
 // Sum type used to encode the state of each letter
 export type State =
-    "GUESS"    // The user's guess.
-  | "RED"      // Red means that the letter is nowhere in the word.
-  | "GRAY"     // Gray means that the letter exists in the word but is not in the right position.
-  | "GREEN";   // Green means that the letter is in the right position.
-
+  | 'GUESS' // The user's guess.
+  | 'RED' // Red means that the letter is nowhere in the word.
+  | 'GRAY' // Gray means that the letter exists in the word but is not in the right position.
+  | 'GREEN'; // Green means that the letter is in the right position.
 
 export type Wordle3 = {
-    word: fiveItemRow<letter>,           // The word we are trying to guess
-    guesses: [
-        fiveItemRow<[State, letter]>,    // Guess 1
-        fiveItemRow<[State, letter]>,    // Guess 2
-        fiveItemRow<[State, letter]>     // Guess 3
-    ]
+  word: fiveItemRow<letter>; // The word we are trying to guess
+  guesses: [
+    fiveItemRow<[State, letter]>, // Guess 1
+    fiveItemRow<[State, letter]>, // Guess 2
+    fiveItemRow<[State, letter]> // Guess 3
+  ];
 };
 
 export const wordle1: Wordle3 = {
-    word: {
-        entries: ['J', 'O', 'K', 'E', 'R']
+  word: {
+    entries: ['J', 'O', 'K', 'E', 'R'],
+  },
+  guesses: [
+    {
+      entries: [
+        ['GUESS', 'M'],
+        ['GUESS', 'U'],
+        ['GUESS', 'S'],
+        ['GUESS', 'K'],
+        ['GUESS', 'Y'],
+      ],
     },
-    guesses: [
-        {
-            entries: [
-                ["GUESS", 'M'],
-                ["GUESS", 'U'],
-                ["GUESS", 'S'],
-                ["GUESS", 'K'],
-                ["GUESS", 'Y']
-            ]
-        },
-        {
-            entries: [
-                ["GUESS", 'F'],
-                ["GUESS", 'U'],
-                ["GUESS", 'S'],
-                ["GUESS", 'S'],
-                ["GUESS", 'Y']
-            ]
-        },
-        {
-            entries: [
-                ["GUESS", 'H'],
-                ["GUESS", 'O'],
-                ["GUESS", 'U'],
-                ["GUESS", 'S'],
-                ["GUESS", 'E']
-            ]
-        }
-    ]
-}
+    {
+      entries: [
+        ['GUESS', 'F'],
+        ['GUESS', 'U'],
+        ['GUESS', 'S'],
+        ['GUESS', 'S'],
+        ['GUESS', 'Y'],
+      ],
+    },
+    {
+      entries: [
+        ['GUESS', 'H'],
+        ['GUESS', 'O'],
+        ['GUESS', 'U'],
+        ['GUESS', 'S'],
+        ['GUESS', 'E'],
+      ],
+    },
+  ],
+};
 
 export const wordle2: Wordle3 = {
-    word: {
-        entries: ['J', 'O', 'K', 'E', 'R']
+  word: {
+    entries: ['J', 'O', 'K', 'E', 'R'],
+  },
+  guesses: [
+    {
+      entries: [
+        ['GUESS', 'C'],
+        ['GUESS', 'A'],
+        ['GUESS', 'K'],
+        ['GUESS', 'E'],
+        ['GUESS', 'S'],
+      ],
     },
-    guesses: [
-        {
-            entries: [
-                ["GUESS", 'C'],
-                ["GUESS", 'A'],
-                ["GUESS", 'K'],
-                ["GUESS", 'E'],
-                ["GUESS", 'S']
-            ]
-        },
-        {
-            entries: [
-                ["GUESS", 'P'],
-                ["GUESS", 'O'],
-                ["GUESS", 'K'],
-                ["GUESS", 'E'],
-                ["GUESS", 'R']
-            ]
-        },
-        {
-            entries: [
-                ["GUESS", 'J'],
-                ["GUESS", 'O'],
-                ["GUESS", 'K'],
-                ["GUESS", 'E'],
-                ["GUESS", 'R']
-            ]
-        },
-    ]
-}
+    {
+      entries: [
+        ['GUESS', 'P'],
+        ['GUESS', 'O'],
+        ['GUESS', 'K'],
+        ['GUESS', 'E'],
+        ['GUESS', 'R'],
+      ],
+    },
+    {
+      entries: [
+        ['GUESS', 'J'],
+        ['GUESS', 'O'],
+        ['GUESS', 'K'],
+        ['GUESS', 'E'],
+        ['GUESS', 'R'],
+      ],
+    },
+  ],
+};
 
 /* ----------------------------------------------------- **
 ### 2a. Complete the function definition below. (15 pts)
@@ -314,10 +346,12 @@ Example:
 
 ** ----------------------------------------------------- */
 
-export function wordle3GetGuess(wordle: Wordle3, guess: 1|2|3): fiveItemRow<[State, letter]> {
-    throw Error("TODO");
+export function wordle3GetGuess(
+  wordle: Wordle3,
+  guess: 1 | 2 | 3
+): fiveItemRow<[State, letter]> {
+  throw Error('TODO');
 }
-
 
 /* ----------------------------------------------------- **
 ### 2b. Complete the function definition below. (15 pts)
@@ -436,10 +470,13 @@ Example:
         }
 ** ----------------------------------------------------- */
 
-export function wordle3SetGuess(wordle: Wordle3, guess: 1|2|3, row: fiveItemRow<letter>): Wordle3 {
-    throw Error("TODO");
+export function wordle3SetGuess(
+  wordle: Wordle3,
+  guess: 1 | 2 | 3,
+  row: fiveItemRow<letter>
+): Wordle3 {
+  throw Error('TODO');
 }
-
 
 /* ==========================================================================  **
 ## 3. Advanced Functions on Wordle Board (40 pts)
@@ -466,10 +503,12 @@ Example:
 
 ** ----------------------------------------------------- */
 
-export function wordle3UsedLetters(wordle: Wordle3, guess: 1|2|3): letter[] {
-    throw Error("TODO");
+export function wordle3UsedLetters(
+  wordle: Wordle3,
+  guess: 1 | 2 | 3
+): letter[] {
+  throw Error('TODO');
 }
-
 
 /* ----------------------------------------------------- **
 ### 3b. Complete the function definition below. (25 pts)
@@ -706,6 +745,6 @@ Example:
 
 ** ----------------------------------------------------- */
 
-export function wordle3Update(wordle: Wordle3, guess: 1|2|3): Wordle3 {
-    throw Error("TODO");
+export function wordle3Update(wordle: Wordle3, guess: 1 | 2 | 3): Wordle3 {
+  throw Error('TODO');
 }
