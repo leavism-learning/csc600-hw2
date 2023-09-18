@@ -173,7 +173,15 @@ export function dropFiveItemRow<T>(
   row: fiveItemRow<T>,
   indices: number[]
 ): T[] {
-  throw Error('TODO');
+  const result: T[] = [];
+
+  row.entries.forEach((value, index) => {
+    if (!indices.includes(index)) {
+      result.push(value);
+    }
+  });
+
+  return result;
 }
 
 /* ----------------------------------------------------- **
