@@ -211,7 +211,15 @@ export function mapFiveItemRow<S, T>(
   row: fiveItemRow<S>,
   f: (arg: S) => T
 ): fiveItemRow<T> {
-  throw Error('TODO');
+  const resultEntries: [T, T, T, T, T] = [
+    f(row.entries[0]),
+    f(row.entries[1]),
+    f(row.entries[2]),
+    f(row.entries[3]),
+    f(row.entries[4]),
+  ];
+
+  return { entries: resultEntries };
 }
 
 /* ==========================================================================  **
