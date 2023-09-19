@@ -366,7 +366,11 @@ export function wordle3GetGuess(
   wordle: Wordle3,
   guess: 1 | 2 | 3
 ): fiveItemRow<[State, letter]> {
-  throw Error('TODO');
+  if (guess < 1 || guess > 3) {
+    throw new Error('Guess index is out-of-bounds.');
+  }
+
+  return wordle[guess - 1];
 }
 
 /* ----------------------------------------------------- **
