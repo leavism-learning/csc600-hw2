@@ -800,5 +800,34 @@ Example:
 ** ----------------------------------------------------- */
 
 export function wordle3Update(wordle: Wordle3, guess: 1 | 2 | 3): Wordle3 {
-  throw Error('TODO');
+  const wordLetters = wordle.word.entries;
+  const guessRow: fiveItemRow<[State, letter]> = wordle.guesses[guess - 1];
+
+  // Update the state based on Wordle rules
+  const updatedGuessRow: fiveItemRow<[State, letter]> = mapFiveItemRow(
+    guessRow,
+    (pair) => {
+      const [, letter] = pair;
+
+      if (wordLetters.includes(letter)) {
+        // Check if the letter is in the correct position
+        if (wordLetters[guessRow.entries.indexOf(pair)] === letter) {
+          return ['GREEN', letter];
+        } else {
+          return ['GRAY', letter];
+        }
+      } else {
+        return ['RED', letter];
+      }
+    }
+  );
+
+  // Create a new Wordle3 object without mutating the original one
+  const newGuesses = [...wordle.guesses] as typeof wordle.guesses;
+  newGuesses[guess - 1] = updatedGuessRow;
+
+  return {
+    word: wordle.word,
+    guesses: newGuesses,
+  };
 }
