@@ -367,7 +367,7 @@ export function wordle3GetGuess(
   guess: 1 | 2 | 3
 ): fiveItemRow<[State, letter]> {
   if (guess < 1 || guess > 3) {
-    throw new Error('Guess index is out-of-bounds.');
+    throw new Error('Guess is out-of-bounds.');
   }
 
   return wordle[guess - 1];
@@ -495,7 +495,23 @@ export function wordle3SetGuess(
   guess: 1 | 2 | 3,
   row: fiveItemRow<letter>
 ): Wordle3 {
-  throw Error('TODO');
+  if (guess < 1 || guess > 3) {
+    return wordle;
+  }
+  // Convert the row of letters to a row of [State, letter] pairs
+  const newRow: fiveItemRow<[State, letter]> = mapFiveItemRow<
+    letter,
+    [State, letter]
+  >(row, (letter) => ['GUESS', letter]);
+
+  // Create a new Wordle3 object without mutating the original one
+  const newGuesses = [...wordle.guesses] as typeof wordle.guesses;
+  newGuesses[guess - 1] = newRow;
+
+  return {
+    word: wordle.word,
+    guesses: newGuesses,
+  };
 }
 
 /* ==========================================================================  **
