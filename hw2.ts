@@ -543,7 +543,25 @@ export function wordle3UsedLetters(
   wordle: Wordle3,
   guess: 1 | 2 | 3
 ): letter[] {
-  throw Error('TODO');
+  if (guess < 1 || guess > 3) {
+    return [];
+  }
+
+  // Extract the guess row for the given position.
+  const guessRow = wordle.guesses[guess - 1];
+
+  // Use mapFiveItemRow to extract letters from the guess row.
+  const guessLettersRow: fiveItemRow<letter> = mapFiveItemRow(
+    guessRow,
+    (pair) => pair[1]
+  );
+
+  // Use filterFiveItemRow to get the letters that are also present in the Wordle word.
+  const usedLetters = filterFiveItemRow(guessLettersRow, (letter) =>
+    wordle.word.entries.includes(letter)
+  );
+
+  return usedLetters;
 }
 
 /* ----------------------------------------------------- **
