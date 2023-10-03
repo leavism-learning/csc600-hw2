@@ -361,7 +361,7 @@ Example:
     }
 
 ** ----------------------------------------------------- */
-
+// Not working
 export function wordle3GetGuess(
   wordle: Wordle3,
   guess: 1 | 2 | 3
@@ -372,6 +372,8 @@ export function wordle3GetGuess(
 
   return wordle[guess - 1];
 }
+
+console.dir(wordle3GetGuess(wordle1, 1));
 
 /* ----------------------------------------------------- **
 ### 2b. Complete the function definition below. (15 pts)
@@ -499,10 +501,10 @@ export function wordle3SetGuess(
     return wordle;
   }
   // Convert the row of letters to a row of [State, letter] pairs
-  const newRow: fiveItemRow<[State, letter]> = mapFiveItemRow<
+  const newRow = mapFiveItemRow<letter, [State, letter]>(row, (letter) => [
+    'GUESS',
     letter,
-    [State, letter]
-  >(row, (letter) => ['GUESS', letter]);
+  ]);
 
   // Create a new Wordle3 object without mutating the original one
   const newGuesses = [...wordle.guesses] as typeof wordle.guesses;
@@ -511,6 +513,28 @@ export function wordle3SetGuess(
   return {
     word: wordle.word,
     guesses: newGuesses,
+  };
+}
+
+// Function written in class as homework answer
+export function wordle3SetGuess2(
+  wordle: Wordle3,
+  guess: 1 | 2 | 3,
+  row: fiveItemRow<letter>
+): Wordle3 {
+  return {
+    word: wordle.word,
+    guesses: [
+      guess === 1
+        ? mapFiveItemRow(row, (arg) => ['GUESS', arg])
+        : wordle.guesses[0],
+      guess === 2
+        ? mapFiveItemRow(row, (arg) => ['GUESS', arg])
+        : wordle.guesses[1],
+      guess === 3
+        ? mapFiveItemRow(row, (arg) => ['GUESS', arg])
+        : wordle.guesses[2],
+    ],
   };
 }
 
@@ -544,7 +568,7 @@ export function wordle3UsedLetters(
   guess: 1 | 2 | 3
 ): letter[] {
   if (guess < 1 || guess > 3) {
-    return [];
+    throw new Error('Guess is out-of-bounds.');
   }
 
   // Extract the guess row for the given position.
@@ -562,6 +586,22 @@ export function wordle3UsedLetters(
   );
 
   return usedLetters;
+}
+
+// Function written in class as homework answer
+export function wordle3UsedLetter2(
+  wordle: Wordle3,
+  guess: 1 | 2 | 3
+): letter[] {
+  const result: letter[] = [];
+
+  for (const x of wordle3GetGuess(wordle, guess).entries) {
+    if (wordle.word.entries.includes(x[1])) {
+      result.push(x[1]);
+    }
+  }
+
+  return result;
 }
 
 /* ----------------------------------------------------- **
@@ -800,6 +840,9 @@ Example:
 ** ----------------------------------------------------- */
 
 export function wordle3Update(wordle: Wordle3, guess: 1 | 2 | 3): Wordle3 {
+  if (guess < 1 || guess > 3) {
+    throw new Error('Guess is out-of-bounds.');
+  }
   const wordLetters = wordle.word.entries;
   const guessRow: fiveItemRow<[State, letter]> = wordle.guesses[guess - 1];
 
@@ -829,5 +872,39 @@ export function wordle3Update(wordle: Wordle3, guess: 1 | 2 | 3): Wordle3 {
   return {
     word: wordle.word,
     guesses: newGuesses,
+  };
+}
+
+export function wordle3Update2(wordle: Wordle3, guess: 1 | 2 | 3): Wordle3 {
+  function update(i: number, guess: 1 | 2 | 3): [State, letter] {
+    const row = wordle3GetGuess(wordle, guess);
+    if (wordle.word.entries[i] === row.entries[i][1]) {
+      return ['GREEN', row.entries[i][1]];
+    } else if (wordle3UsedLetters(wordle, guess).includes(row.entries[i][1])) {
+      return ['GRAY', row.entries[i][1]];
+    } else {
+      return ['RED', row.entries[i][1]];
+    }
+  }
+
+  function updateRow(guess: 1 | 2 | 3): fiveItemRow<[State, letter]> {
+    return {
+      entries: [
+        update(0, guess),
+        update(1, guess),
+        update(2, guess),
+        update(3, guess),
+        update(4, guess),
+      ],
+    };
+  }
+
+  return {
+    word: wordle.word,
+    guesses: [
+      guess === 1 ? updateRow(1) : wordle.guesses[0],
+      guess === 2 ? updateRow(2) : wordle.guesses[1],
+      guess === 3 ? updateRow(3) : wordle.guesses[2],
+    ],
   };
 }
